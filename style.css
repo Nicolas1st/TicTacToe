@@ -4,7 +4,10 @@
   --main-theme-color: #366735;
 }
 
-body { background-color: var(--blue); }
+
+body {
+    background-color: var(--blue);
+}
 
 
 * {
@@ -63,12 +66,91 @@ body { background-color: var(--blue); }
 	padding: 0.75vw
 }
 
+
 .field__tile {
 	height: 8vw;
 	width: 8vw;
 	border-radius: 12px;
 	background: rgba(190, 190, 190);
 	margin-bottom: 0.75vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+
+.outer-circle {
+	width: 6vw;
+	height: 6vw;
+	background-color: black;
+	border-radius: 50%;
+	position: relative;
+}
+
+
+.inner-circle {
+	width: 4.5vw;
+	height: 4.5vw;
+	background: rgba(190, 190, 190);
+	border-radius: 50%;
+	position: absolute;
+	left: 50%;
+	top: 50%; 
+	transform: translate(-50%, -50%);
+}
+
+
+.symbol-chooser__inner-circle {
+	height: 1.8vw;
+	width: 1.8vw;
+	/* background-color: #366735; */
+}
+
+.symbol-chooser__outer-circle {
+	height: 2.5vw;
+	width: 2.5vw;
+}
+
+
+.cross {
+	width: 7vw;
+	height: 7vw;
+	position: relative;
+}
+
+
+.cross__left-stick, .cross__right-stick{
+	width: 6.5vw;
+	height: 1vw;
+	border-radius: 0.5vw;
+	position: absolute;
+	left: 50%;
+	top: 50%; 
+	background-color: black;
+}
+
+
+.cross__left-stick {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+
+.cross__right-stick {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
+.symbol-chooser__cross {
+	height: 3vw;
+	width: 3vw;
+}
+
+
+.symbol-chooser__left-stick, .symbol-chooser__right-stick{
+	width: 2.8vw;
+	height: 0.4vw;
+	border-radius: 0.2vw;
 }
 
 
@@ -154,15 +236,35 @@ body { background-color: var(--blue); }
 }
 
 
-.controls__restart-button, .controls__give-up-button {
-	display: block;
+.controls__give-up-button, .symbol-chooser {
 	height: 3.625vw;
+	padding: 0 2vw;
 	background: rgba(190, 190, 190);
 	border-radius: 12px;
-	border: none;
-	outline: none;
 	color: black;
 	font-size: 27px;
+}
+
+
+.controls__give-up-button {
+	display: block;
+	border: none;
+	outline: none;
+	text-align: left;
+}
+
+.symbol-chooser {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+
+.symbol-chooser__container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
 }
 
 
@@ -187,6 +289,7 @@ body { background-color: var(--blue); }
 	font-style: italic;
 	display: block;
 }
+
 
 .footer__link {
 	text-decoration: none;

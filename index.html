@@ -1,61 +1,84 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<title> TicTacToe Game </title>
-		<link rel="stylesheet" href="style.css">
-	</head>
+<head>
+    <title> TicTacToe Game </title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-	<body class="page">
+<body class="page">
 
-		<div class="heading__container">
-			<h1 class="heading"> TicTacToe </h1>
-		</div>
+    <header class="heading__container">
+        <h1 class="heading"> TicTacToe </h1>
+    </header>
 
-		
-		<div class="container">
+    <main class="container">
 
-			<div class="field">
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-				<div class="field__tile"> </div>
-			</div>
+        <div class="field">
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+            <div class="field__tile"> </div>
+        </div>
 
-			<div class="side-panel">
+        <div class="side-panel">
 
-				<div class="stats">
-					<div class="stats__victories" >
-						<div class="stats__text"> <p > Won </p> </div>
-						<div class="stats__result"> <p > 0 </p> </div>
-					</div>
-					<div class="stats__losses">
-						<div class="stats__text"> <p class="stats__text"> Lost </p> </div>
-						<div class="stats__result"> <p class="stats__result"> 0 </p></div>
-						
-					</div>
-				</div>
+            <div class="stats">
 
-				<div class="controls">
-					<button class="controls__restart-button"> Restart </button>
-					<button class="controls__give-up-button"> Give Up </button>
-				</div>
+                <div class="stats__victories">
+                    <div class="stats__text">
+                        <p> Won </p>
+                    </div>
+                    <div class="stats__result">
+                        <p> 0 </p>
+                    </div>
+                </div>
 
-			</div>
-		</div>
-		
-		<footer class="footer">
-			<div class="footer__link-container">
-				<img src="./img/github_icon.png">
-				<a href="" class="footer__link" alt="github icon" width="30px" height="30px"> Project Repository </a>
-			</div>
-		</footer>
+                <div class="stats__losses">
+                    <div class="stats__text">
+                        <p class="stats__text"> Lost </p>
+                    </div>
+                    <div class="stats__result">
+                        <p class="stats__result"> 0 </p>
+                    </div>
+                </div>
 
-	</body>
+            </div>
+
+            <div class="controls">
+                <div class="symbol-chooser">
+                    <p class="symbol-chooser__text"> Choose side </p>
+                    <div class="symbol-chooser__container">
+                        <div class="cross symbol-chooser__cross">
+                            <div class="cross__left-stick symbol-chooser__left-stick"> </div>
+                            <div class="cross__right-stick symbol-chooser__right-stick"> </div>
+                        </div>
+                        <div class="outer-circle symbol-chooser__outer-circle">
+                            <div class="inner-circle symbol-chooser__inner-circle"> </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="controls__give-up-button"> Give Up </button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__link-container">
+            <img src="./img/github_icon.png">
+            <a href="https://github.com/Nicolas1st/TicTacToe/" class="footer__link" alt="github icon" width="30px"
+                height="30px"> Project Repository </a>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+
+</body>
 
 </html>
