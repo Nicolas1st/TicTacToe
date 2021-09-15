@@ -102,14 +102,13 @@ body {
 
 
 .symbol-chooser__inner-circle {
-	height: 1.8vw;
-	width: 1.8vw;
-	/* background-color: #366735; */
+	height: 1.235vw;
+	width: 1.235vw;
 }
 
 .symbol-chooser__outer-circle {
-	height: 2.5vw;
-	width: 2.5vw;
+	height: 2vw;
+	width: 2vw;
 }
 
 
@@ -142,13 +141,13 @@ body {
 
 
 .symbol-chooser__cross {
-	height: 3vw;
-	width: 3vw;
+	height: 2.6vw;
+	width: 2.6vw;
 }
 
 
 .symbol-chooser__left-stick, .symbol-chooser__right-stick{
-	width: 2.8vw;
+	width: 2.3vw;
 	height: 0.4vw;
 	border-radius: 0.2vw;
 }
