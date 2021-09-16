@@ -129,14 +129,27 @@ function checkVictoryConditions() {
 
 
 const fieldTiles = document.querySelectorAll(".field__tile");
+const winCount = document.querySelector(".stats__win-count"); 
+const lossCount = document.querySelector(".stats__loss-count"); 
+
+
+function incrementWinLossCounters(winningSide, playerSymbol) {
+    if (winningSide === playerSymbol) {
+        winCount.textContent = Number(winCount.textContent) + 1;
+    } else {
+        lossCount.textContent = Number(lossCount.textContent) + 1;
+    }
+}
 
 
 function handleWinConditionCheckResult(result) {
     if (result === 'x') {
+        incrementWinLossCounters(result, appState.playerSymbol);
         alert("crosses won");
         field.removeEventListener('click', handleButtonFieldClick);
         appState.gameIsInProgress = false;
     } else if (result === 'o') {
+        incrementWinLossCounters(result, appState.playerSymbol);
         alert("circles won");
         field.removeEventListener('click', handleButtonFieldClick);
         appState.gameIsInProgress = false;
@@ -167,15 +180,15 @@ function makeRandomMove() {
     setTimeout(() => {
         const elementToBeAdded = createChosenElement(appState.botSymbol);
         tile.appendChild(elementToBeAdded);
+        let [x, y] = randomFreeTileID.split(', ');
+        appState.field[x][y] = appState.botSymbol;
+        appState.freeTileIDs.splice(randomlyChosenIndex, 1);
+        appState.moveCount++;
+
+        const res = checkVictoryConditions();
+        field.addEventListener('click', handleButtonFieldClick);
+        handleWinConditionCheckResult(res);
     }, randomDelay);
-
-    let [x, y] = randomFreeTileID.split(', ');
-    appState.field[x][y] = appState.botSymbol;
-    appState.freeTileIDs.splice(randomlyChosenIndex, 1);
-    appState.moveCount++;
-
-    const res = checkVictoryConditions();
-    handleWinConditionCheckResult(res);
 
 }
 
@@ -243,6 +256,7 @@ function handleButtonFieldClick(e) {
         if (res !== undefined) {
             return;
         }
+        field.removeEventListener("click", handleButtonFieldClick);
 
         makeRandomMove();
 
@@ -259,9 +273,7 @@ const playForCrossesButton = document.querySelector(".symbol-chooser__cross");
 playForCrossesButton.addEventListener("click", (e) => {
     appState.playerSymbol = "x";
     appState.botSymbol = "o";
-    console.log('outside')
     if (!appState.gameIsInProgress) {
-        console.log('inside')
         appState.gameIsInProgress = true;
         restoreTheFieldState(field);
         restoreInitialAppState();
@@ -274,13 +286,24 @@ const playForCirclesButton = document.querySelector(".symbol-chooser__outer-circ
 playForCirclesButton.addEventListener("click", (e) => {
     appState.playerSymbol = "o";
     appState.botSymbol = "x";
-    console.log('outside')
     if (!appState.gameIsInProgress) {
-        console.log('inside')
         appState.gameIsInProgress = true;
         restoreTheFieldState(field);
         restoreInitialAppState();
         field.addEventListener("click", handleButtonFieldClick);
     }
     makeRandomMove();
+});
+
+
+// the give up button logic has to be fixed
+// bot player's move appear after it has been pressed
+const giveUpButton = document.querySelector(".controls__give-up-button");
+giveUpButton.addEventListener("click", () => {
+    // to not allow to add losses to the counter when there are not characters on the field
+    if (appState.moveCount == 0) {
+        return;
+    }
+    lossCount.textContent = Number(lossCount.textContent) + 1;
+    restoreTheFieldState(field);
 });
