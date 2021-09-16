@@ -7,6 +7,7 @@ const appState = {
             [0, 0, 0],
             [0, 0, 0], ],
     gridSize: 3,
+    gameIsInProgress: true,
 };
 
 
@@ -21,6 +22,16 @@ function restoreInitialAppState() {
                       [0, 0, 0],
                       [0, 0, 0], ];
     appState.gridSize = 3;
+}
+
+
+function restoreTheFieldState(field) {
+    const tiles = field.children;
+    for (let i = 0; i < tiles.length; i++) {
+        if (tiles[i].lastChild) {
+            tiles[i].lastChild.remove(); 
+        }
+    }    
 }
 
 
@@ -43,9 +54,9 @@ function checkVictoryConditions() {
         }
 
         if (countCrosses === appState.gridSize) {
-            return 'cross';
+            return 'x';
         } else if (countCircles === appState.gridSize) {
-            return 'circle';
+            return 'o';
         }
 
         countCrosses = 0;
@@ -66,9 +77,9 @@ function checkVictoryConditions() {
         }
 
         if (countCrosses === appState.gridSize) {
-            return 'cross';
+            return 'x';
         } else if (countCircles === appState.gridSize) {
-            return 'circle';
+            return 'o';
         }
 
         countCrosses = 0;
@@ -89,9 +100,9 @@ function checkVictoryConditions() {
     }
 
     if (countCrosses === appState.gridSize) {
-        return 'cross';
+        return 'x';
     } else if (countCircles === appState.gridSize) {
-        return 'circle';
+        return 'o';
     }
 
     countCrosses = 0;
@@ -109,15 +120,28 @@ function checkVictoryConditions() {
     }
 
     if (countCrosses === appState.gridSize) {
-        return 'cross';
+        return 'x';
     } else if (countCircles === appState.gridSize) {
-        return 'circle';
+        return 'o';
     }
 
 }
 
 
 const fieldTiles = document.querySelectorAll(".field__tile");
+
+
+function handleWinConditionCheckResult(result) {
+    if (result === 'x') {
+        alert("crosses won");
+        field.removeEventListener('click', handleButtonFieldClick);
+        appState.gameIsInProgress = false;
+    } else if (result === 'o') {
+        alert("circles won");
+        field.removeEventListener('click', handleButtonFieldClick);
+        appState.gameIsInProgress = false;
+    }
+}
 
 
 function makeRandomMove() {
@@ -151,11 +175,7 @@ function makeRandomMove() {
     appState.moveCount++;
 
     const res = checkVictoryConditions();
-    if (res === 'x') {
-        alert("crosses won");
-    } else if (res === 'o') {
-        alert("circles won");
-    }
+    handleWinConditionCheckResult(res);
 
 }
 
@@ -194,8 +214,7 @@ function createChosenElement(choice) {
 }
 
 
-const field = document.querySelector(".field");
-field.addEventListener("click", (e) => {
+function handleButtonFieldClick(e) {
 
     const clickedElement = e.target;
 
@@ -217,29 +236,37 @@ field.addEventListener("click", (e) => {
         appState.freeTileIDs.splice(appState.freeTileIDs.indexOf(elID), 1);
         appState.moveCount++;
 
-
-        console.log(`The tile is now occupied by the ${appState.playerSymbol}`);
-        console.log(`Player move: field id is${elID}`);
-
         const res = checkVictoryConditions();
-        if (res === 'x') {
-            alert("crosses won");
-        } else if (res === 'o') {
-            alert("circles won");
+        handleWinConditionCheckResult(res);
+
+        // in case some one has won, there should not be any further moves made
+        if (res !== undefined) {
+            return;
         }
 
-        console.log(appState.field)
         makeRandomMove();
 
     }
-});
+
+}
+
+
+const field = document.querySelector(".field");
+field.addEventListener("click", handleButtonFieldClick);
 
 
 const playForCrossesButton = document.querySelector(".symbol-chooser__cross");
 playForCrossesButton.addEventListener("click", (e) => {
     appState.playerSymbol = "x";
     appState.botSymbol = "o";
-    console.log("Playing for crosses");
+    console.log('outside')
+    if (!appState.gameIsInProgress) {
+        console.log('inside')
+        appState.gameIsInProgress = true;
+        restoreTheFieldState(field);
+        restoreInitialAppState();
+        field.addEventListener("click", handleButtonFieldClick);
+    }
 });
 
 
@@ -247,6 +274,13 @@ const playForCirclesButton = document.querySelector(".symbol-chooser__outer-circ
 playForCirclesButton.addEventListener("click", (e) => {
     appState.playerSymbol = "o";
     appState.botSymbol = "x";
-    console.log("Playing for circles");
+    console.log('outside')
+    if (!appState.gameIsInProgress) {
+        console.log('inside')
+        appState.gameIsInProgress = true;
+        restoreTheFieldState(field);
+        restoreInitialAppState();
+        field.addEventListener("click", handleButtonFieldClick);
+    }
     makeRandomMove();
 });
