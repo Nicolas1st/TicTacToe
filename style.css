@@ -201,29 +201,21 @@ body {
 }
 
 
-.stats__text {
+.stats__text, .stats__result {
 	height: 2.5vw;
 	width: 7.2vw;
 	border-radius: 8px;
 	text-align: center;
 	background-color: var(--main-theme-color);
 	font-size: 30px;
-	font-weight: 700;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
 
-.stats__result {
-	height: 2.5vw;
-	width: 7.2vw;
-	background-color: var(--main-theme-color);
-	font-size: 30px;
-	border-radius: 8px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.stats__text {
+	font-weight: 700;
 }
 
 
