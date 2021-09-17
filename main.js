@@ -271,28 +271,55 @@ field.addEventListener("click", handleButtonFieldClick);
 
 const playForCrossesButton = document.querySelector(".symbol-chooser__cross");
 playForCrossesButton.addEventListener("click", (e) => {
+
+    if (appState.gameIsInProgress) {
+
+        if (appState.moveCount !== 0) {
+            incrementWinLossCounters(appState.botSymbol, appState.playerSymbol);
+        }
+
+    }
+
+    // this thing if placed below overrides the symbol change logic
+    restoreInitialAppState();
+    restoreTheFieldState(field);
+    field.addEventListener("click", handleButtonFieldClick);
+
+    appState.moveCount = 0;
+    appState.gameIsInProgress = true;
     appState.playerSymbol = "x";
     appState.botSymbol = "o";
-    if (!appState.gameIsInProgress) {
-        appState.gameIsInProgress = true;
-        restoreTheFieldState(field);
-        restoreInitialAppState();
-        field.addEventListener("click", handleButtonFieldClick);
-    }
+
 });
 
 
 const playForCirclesButton = document.querySelector(".symbol-chooser__outer-circle");
 playForCirclesButton.addEventListener("click", (e) => {
+
+    if (appState.gameIsInProgress) {
+
+        // check whether moves had been made, if so count as loss
+        // if (appState.gridSize**2 !== appState.freeTileIDs.length) {
+        //     incrementWinLossCounters(appState.botSymbol, appState.playerSymbol);
+        // }
+        if (appState.moveCount !== 0) {
+            incrementWinLossCounters(appState.botSymbol, appState.playerSymbol);
+        }
+
+    }
+
+    // this thing if placed below overrides the symbol change logic
+    restoreInitialAppState();
+    restoreTheFieldState(field);
+    field.addEventListener("click", handleButtonFieldClick);
+
+    appState.moveCount = 0;
+    appState.gameIsInProgress = true;
     appState.playerSymbol = "o";
     appState.botSymbol = "x";
-    if (!appState.gameIsInProgress) {
-        appState.gameIsInProgress = true;
-        restoreTheFieldState(field);
-        restoreInitialAppState();
-        field.addEventListener("click", handleButtonFieldClick);
-    }
+
     makeRandomMove();
+
 });
 
 
