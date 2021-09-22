@@ -5,19 +5,16 @@ const appState = {
     freeTileIDs: ["0, 0", "0, 1", "0, 2",
                   "1, 0", "1, 1", "1, 2",
                   "2, 0", "2, 1", "2, 2"],
-    // field: [[0, 0, 0],
-    //         [0, 0, 0],
-    //         [0, 0, 0], ],
     gridSize: 3,
     gameIsInProgress: true,
     crossesVictoryCounters: {},
     circlesVictoryCounters: {},
+    playerGaveUp: false,
+    playerChangedSide: false,
 };
 
 
 const fieldTiles = document.querySelectorAll(".field__tile");
-const winCount = document.querySelector(".stats__win-count"); 
-const lossCount = document.querySelector(".stats__loss-count"); 
 
 
 function restoreInitialAppState(appState) {
@@ -28,9 +25,12 @@ function restoreInitialAppState(appState) {
     appState.freeTileIDs = ["0, 0", "0, 1", "0, 2",
                             "1, 0", "1, 1", "1, 2",
                             "2, 0", "2, 1", "2, 2"];
+    appState.gameIsInProgress = true;
     appState.gridSize = 3;
     appState.crossesVictoryCounters = {};
     appState.circlesVictoryCounters = {};
+    appState.playerGaveUp = false;
+    appState.playerChangedSide = false;
 
 }
 
@@ -107,6 +107,9 @@ function checkVictoryCounters(appState, symbol) {
 
 function updateDashboardCounters(winningSide, playerSymbol) {
 
+    const winCount = document.querySelector(".stats__win-count"); 
+    const lossCount = document.querySelector(".stats__loss-count"); 
+
     if (winningSide === playerSymbol) {
         winCount.textContent = Number(winCount.textContent) + 1;
     } else {
@@ -116,7 +119,6 @@ function updateDashboardCounters(winningSide, playerSymbol) {
 }
 
 
-// cleanup after the game is over
 function handleWinConditionCheckResult(appState, result) {
     if (result === 'x') {
         updateDashboardCounters(result, appState.playerSymbol);
@@ -150,6 +152,15 @@ function makeRandomMove() {
 
     const randomDelay = Math.random() * 1703;
     setTimeout(() => {
+
+        if (appState.playerGaveUp === true) {
+            // to not display changes on the board
+            return;
+        } else if (appState.playerChangedSide) {
+            appState.playerChangedSide = false;
+            return;
+        }
+
         const elementToBeAdded = createChosenElement(appState.botSymbol);
         tile.appendChild(elementToBeAdded);
         let [x, y] = randomFreeTileID.split(', ');
@@ -157,9 +168,9 @@ function makeRandomMove() {
         appState.moveCount++;
 
         const res = checkVictoryCounters(appState, appState.botSymbol);
-
         field.addEventListener('click', handleButtonFieldClick);
         handleWinConditionCheckResult(appState, res);
+
     }, randomDelay);
 
 }
@@ -187,11 +198,6 @@ function createChosenElement(elementName) {
 
         const outerCircle = document.createElement("div");
         outerCircle.classList.add("outer-circle");
-
-        const innerCircle = document.createElement("div");
-        innerCircle.classList.add("inner-circle");
-
-        outerCircle.appendChild(innerCircle);
 
         return outerCircle;
 
@@ -246,9 +252,12 @@ playForCrossesButton.addEventListener("click", (e) => {
     // counting as loss
     if (appState.gameIsInProgress && appState.moveCount !== 0) {
         updateDashboardCounters(appState.botSymbol, appState.playerSymbol);
+        restoreInitialAppState(appState);
+        appState.playerChangedSide = true;
+    } else {
+        restoreInitialAppState(appState);
     }
 
-    restoreInitialAppState(appState);
     appState.playerSymbol = "x";
     appState.botSymbol = "o";
 
@@ -259,15 +268,18 @@ playForCrossesButton.addEventListener("click", (e) => {
 });
 
 
-const playForCirclesButton = document.querySelector(".symbol-chooser__outer-circle");
+const playForCirclesButton = document.querySelector(".symbol-chooser__circle-container");
 playForCirclesButton.addEventListener("click", (e) => {
 
     // couting as loss
     if (appState.gameIsInProgress && appState.moveCount !== 0) {
         updateDashboardCounters(appState.botSymbol, appState.playerSymbol);
+        restoreInitialAppState(appState);
+        appState.playerChangedSide = true;
+    } else {
+        restoreInitialAppState(appState);
     }
 
-    restoreInitialAppState(appState);
     appState.playerSymbol = "o";
     appState.botSymbol = "x";
 
@@ -288,6 +300,8 @@ giveUpButton.addEventListener("click", () => {
 
     restoreTheFieldState(field);
     restoreInitialAppState(appState);
+    appState.playerGaveUp = true;
 
     lossCount.textContent = Number(lossCount.textContent) + 1;
+
 });
