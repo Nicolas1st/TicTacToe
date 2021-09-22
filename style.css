@@ -2,6 +2,8 @@
   --heading-height: 150px;
   --footer-height: 150px;
   --main-theme-color: #366735;
+  --second-theme-color: rgba(190, 190, 190);
+  --highlight-color: rgba(140, 140, 140);
 }
 
 
@@ -45,7 +47,7 @@ body {
 
 .container {
 	width: 60vw;
-	background: rgba(190, 190, 190);
+	background-color: var(--second-theme-color);
 	align-self: center;
 	border-radius: 50px;
 	display: flex;
@@ -71,7 +73,8 @@ body {
 	height: 8vw;
 	width: 8vw;
 	border-radius: 12px;
-	background: rgba(190, 190, 190);
+	background-color: var(--second-theme-color);
+	transition-duration: 0.7s;
 	margin-bottom: 0.75vw;
 	display: flex;
 	justify-content: center;
@@ -79,36 +82,55 @@ body {
 }
 
 
+.field__tile:hover {
+	background-color: var(--highlight-color);
+}
+
+
 
 .outer-circle {
 	width: 6vw;
 	height: 6vw;
-	background-color: black;
+	border: 0.75vw black solid;
+	background-color: rgba(0, 0, 0, 0);
 	border-radius: 50%;
 	position: relative;
 }
 
 
-.inner-circle {
+/* .inner-circle {
 	width: 4.5vw;
 	height: 4.5vw;
-	background: rgba(190, 190, 190);
+	background-color: var(--second-theme-color);
 	border-radius: 50%;
 	position: absolute;
 	left: 50%;
 	top: 50%; 
 	transform: translate(-50%, -50%);
+} */
+
+
+.symbol-chooser__circle-container {
+	width: 2.6vw;
+	height: 2.6vw;
+	border-radius: 0.3vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 
-.symbol-chooser__inner-circle {
-	height: 1.235vw;
-	width: 1.235vw;
+.symbol-chooser__circle-container:hover {
+	background-color: var(--highlight-color);
+	transition-duration: 0.7s;
 }
 
-.symbol-chooser__outer-circle {
+
+.symbol-chooser__circle {
+	background-color: rgba(0, 0, 0, 0);
 	height: 2vw;
 	width: 2vw;
+	border: 0.387vw black solid;
 }
 
 
@@ -143,6 +165,14 @@ body {
 .symbol-chooser__cross {
 	height: 2.6vw;
 	width: 2.6vw;
+	border-radius: 0.3vw;
+	transition-duration: 0.7s;
+}
+
+
+.symbol-chooser__cross:hover {
+	background-color: var(--highlight-color);
+	transition-duration: 0.7s;
 }
 
 
@@ -178,7 +208,7 @@ body {
 }
 
 .stats {
-	background: rgba(190, 190, 190);
+	background-color: var(--second-theme-color);
 	height: 8vw;
 	border-radius: 12px;
 	display: flex;
@@ -230,7 +260,7 @@ body {
 .controls__give-up-button, .symbol-chooser {
 	height: 3.625vw;
 	padding: 0 2vw;
-	background: rgba(190, 190, 190);
+	background-color: var(--second-theme-color);
 	border-radius: 12px;
 	color: black;
 	font-size: 27px;
