@@ -2,130 +2,17 @@ const appState = {
     moveCount: 0,
     playerSymbol: "x",
     botSymbol: "o",
-    freeTileIDs: ["0, 0", "0, 1", "0, 2", "1, 0", "1, 1", "1, 2", "2, 0", "2, 1", "2, 2"],
-    field: [[0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0], ],
+    freeTileIDs: ["0, 0", "0, 1", "0, 2",
+                  "1, 0", "1, 1", "1, 2",
+                  "2, 0", "2, 1", "2, 2"],
+    // field: [[0, 0, 0],
+    //         [0, 0, 0],
+    //         [0, 0, 0], ],
     gridSize: 3,
     gameIsInProgress: true,
+    crossesVictoryCounters: {},
+    circlesVictoryCounters: {},
 };
-
-
-function restoreInitialAppState() {
-    appState.moveCount = 0;
-    appState.playerSymbol = "x";
-    appState.botSymbol = "o";
-    appState.freeTileIDs = ["0, 0", "0, 1", "0, 2",
-                            "1, 0", "1, 1", "1, 2",
-                            "2, 0", "2, 1", "2, 2"];
-    appState.field = [[0, 0, 0],
-                      [0, 0, 0],
-                      [0, 0, 0], ];
-    appState.gridSize = 3;
-}
-
-
-function restoreTheFieldState(field) {
-    const tiles = field.children;
-    for (let i = 0; i < tiles.length; i++) {
-        if (tiles[i].lastChild) {
-            tiles[i].lastChild.remove(); 
-        }
-    }    
-}
-
-
-// refactor it later
-function checkVictoryConditions() {
-
-    let symbol;
-    let countCrosses = 0;
-    let countCircles = 0;
-
-    for (let row = 0; row < appState.gridSize; row++) {
-
-        for (let col = 0; col < appState.gridSize; col++) {
-            symbol = appState.field[row][col];
-            if (symbol === 'x') {
-                countCrosses++;
-            } else if (symbol === 'o') {
-                countCircles++;
-            }
-        }
-
-        if (countCrosses === appState.gridSize) {
-            return 'x';
-        } else if (countCircles === appState.gridSize) {
-            return 'o';
-        }
-
-        countCrosses = 0;
-        countCircles = 0;
-
-    }
-
-    // cols
-    for (let col = 0; col < appState.gridSize; col++) {
-
-        for (let row = 0; row < appState.gridSize; row++) {
-            symbol = appState.field[row][col];
-            if (symbol === 'x') {
-                countCrosses++;
-            } else if (symbol === 'o') {
-                countCircles++;
-            }
-        }
-
-        if (countCrosses === appState.gridSize) {
-            return 'x';
-        } else if (countCircles === appState.gridSize) {
-            return 'o';
-        }
-
-        countCrosses = 0;
-        countCircles = 0;
-
-    }
-
-
-    // diags
-    // on one diagonal the coordinates for both row and col always match
-    for (let i = 0; i < appState.gridSize; i++) {
-        symbol = appState.field[i][i];
-        if (symbol === 'x') {
-            countCrosses++;
-        } else if (symbol === 'o') {
-            countCircles++;
-        }
-    }
-
-    if (countCrosses === appState.gridSize) {
-        return 'x';
-    } else if (countCircles === appState.gridSize) {
-        return 'o';
-    }
-
-    countCrosses = 0;
-    countCircles = 0;
-
-    // on the other diagonal the sum of coordinates is always gridSize - 1
-    const coordSum = appState.gridSize - 1;
-    for (let i = 0; i < appState.gridSize; i++) {
-        symbol = appState.field[i][coordSum - i];
-        if (symbol === 'x') {
-            countCrosses++;
-        } else if (symbol === 'o') {
-            countCircles++;
-        }
-    }
-
-    if (countCrosses === appState.gridSize) {
-        return 'x';
-    } else if (countCircles === appState.gridSize) {
-        return 'o';
-    }
-
-}
 
 
 const fieldTiles = document.querySelectorAll(".field__tile");
@@ -133,27 +20,116 @@ const winCount = document.querySelector(".stats__win-count");
 const lossCount = document.querySelector(".stats__loss-count"); 
 
 
-function incrementWinLossCounters(winningSide, playerSymbol) {
+function restoreInitialAppState(appState) {
+
+    appState.moveCount = 0;
+    appState.playerSymbol = "x";
+    appState.botSymbol = "o";
+    appState.freeTileIDs = ["0, 0", "0, 1", "0, 2",
+                            "1, 0", "1, 1", "1, 2",
+                            "2, 0", "2, 1", "2, 2"];
+    appState.gridSize = 3;
+    appState.crossesVictoryCounters = {};
+    appState.circlesVictoryCounters = {};
+
+}
+
+
+function restoreTheFieldState(field) {
+
+    const tiles = field.children;
+    for (let i = 0; i < tiles.length; i++) {
+        if (tiles[i].lastChild) {
+            tiles[i].lastChild.remove(); 
+        }
+    }
+
+}
+
+
+function incrementVictoryCounters(appState, symbol, elementsXCoord, elementsYCoord) {
+
+    function initOrIncrementCounter(symbolCounters, counterName) {
+        if (symbolCounters[counterName] === undefined) {
+            symbolCounters[counterName] = 1; 
+        } else {
+            symbolCounters[counterName] += 1; 
+        }
+    }
+
+    let symbolCounters;
+    if (symbol === "x") {
+        symbolCounters = appState.crossesVictoryCounters;
+    } else if (symbol === "o") {
+        symbolCounters = appState.circlesVictoryCounters;
+    }
+
+    const nthRowCounter = `row${elementsXCoord}`;
+    initOrIncrementCounter(symbolCounters, nthRowCounter);
+
+    const nthColCounter = `col${elementsYCoord}`;
+    initOrIncrementCounter(symbolCounters, nthColCounter);
+
+    if (elementsXCoord === elementsYCoord) {
+        // if the coordinates are equal it means the element is on the first
+        // diagonal
+        initOrIncrementCounter(symbolCounters, "firstDiagonal");
+    } 
+
+    if (Number(elementsXCoord) + Number(elementsYCoord) === (appState.gridSize - 1)) {
+        // check second diagonal, if coordinates sum is equal to grid size - 1
+        // the element is on the second diagonal
+        initOrIncrementCounter(symbolCounters, "secondDiagonal");
+    } 
+
+}
+
+
+function checkVictoryCounters(appState, symbol) {
+
+    let victoryCounters;
+    if (symbol === "x") {
+        victoryCounters = appState.crossesVictoryCounters;
+    } else if (symbol === "o") {
+        victoryCounters = appState.circlesVictoryCounters;
+    }
+    
+    for (let victoryCounter in victoryCounters) {
+        if (victoryCounters[victoryCounter] === appState.gridSize) {
+            return symbol;
+        }
+    }
+
+    return undefined;
+
+}
+
+
+function updateDashboardCounters(winningSide, playerSymbol) {
+
     if (winningSide === playerSymbol) {
         winCount.textContent = Number(winCount.textContent) + 1;
     } else {
         lossCount.textContent = Number(lossCount.textContent) + 1;
     }
+
 }
 
 
-function handleWinConditionCheckResult(result) {
+// cleanup after the game is over
+function handleWinConditionCheckResult(appState, result) {
     if (result === 'x') {
-        incrementWinLossCounters(result, appState.playerSymbol);
+        updateDashboardCounters(result, appState.playerSymbol);
         alert("crosses won");
-        field.removeEventListener('click', handleButtonFieldClick);
         appState.gameIsInProgress = false;
     } else if (result === 'o') {
-        incrementWinLossCounters(result, appState.playerSymbol);
+        updateDashboardCounters(result, appState.playerSymbol);
         alert("circles won");
-        field.removeEventListener('click', handleButtonFieldClick);
         appState.gameIsInProgress = false;
-    }
+    } else if (appState.freeTileIDs.length === 0) {
+        alert("Draw")
+        appState.gameIsInProgress = false;
+    } 
 }
 
 
@@ -161,6 +137,7 @@ function makeRandomMove() {
 
     const randomlyChosenIndex = Math.floor(Math.random() * appState.freeTileIDs.length);
     const randomFreeTileID = appState.freeTileIDs[randomlyChosenIndex];
+    appState.freeTileIDs.splice(randomlyChosenIndex, 1);
 
     let tile;
     for (let i = 0; i < fieldTiles.length; i++) {
@@ -171,31 +148,26 @@ function makeRandomMove() {
         }
     }
 
-    // if every cell is filled
-    if (tile === undefined) {
-        return;
-    }
-
     const randomDelay = Math.random() * 1703;
     setTimeout(() => {
         const elementToBeAdded = createChosenElement(appState.botSymbol);
         tile.appendChild(elementToBeAdded);
         let [x, y] = randomFreeTileID.split(', ');
-        appState.field[x][y] = appState.botSymbol;
-        appState.freeTileIDs.splice(randomlyChosenIndex, 1);
+        incrementVictoryCounters(appState, appState.botSymbol, x, y);
         appState.moveCount++;
 
-        const res = checkVictoryConditions();
+        const res = checkVictoryCounters(appState, appState.botSymbol);
+
         field.addEventListener('click', handleButtonFieldClick);
-        handleWinConditionCheckResult(res);
+        handleWinConditionCheckResult(appState, res);
     }, randomDelay);
 
 }
 
 
-function createChosenElement(choice) {
+function createChosenElement(elementName) {
 
-    if (choice === "x") {
+    if (elementName === "x") {
 
         const cross = document.createElement("div");
         cross.classList.add("cross");
@@ -211,7 +183,7 @@ function createChosenElement(choice) {
 
         return cross;
 
-    } else {
+    } else if (elementName === "o"){
 
         const outerCircle = document.createElement("div");
         outerCircle.classList.add("outer-circle");
@@ -235,7 +207,6 @@ function handleButtonFieldClick(e) {
 
         const elID = clickedElement.getAttribute("data-field-tile-id")
         if (!appState.freeTileIDs.includes(elID)) {
-            console.log("This tile is occupied, choose another")
             return;
         }
 
@@ -245,18 +216,18 @@ function handleButtonFieldClick(e) {
 
         // updating app state
         let [x, y] = elID.split(', ');
-        appState.field[x][y] = appState.playerSymbol;
+        incrementVictoryCounters(appState, appState.playerSymbol, x, y);
         appState.freeTileIDs.splice(appState.freeTileIDs.indexOf(elID), 1);
         appState.moveCount++;
 
-        const res = checkVictoryConditions();
-        handleWinConditionCheckResult(res);
+        const res = checkVictoryCounters(appState, appState.playerSymbol);
+        handleWinConditionCheckResult(appState, res);
 
-        // in case some one has won, there should not be any further moves made
+        field.removeEventListener("click", handleButtonFieldClick); // prevent further moves if the opponent has not made his yet
+
         if (res !== undefined) {
-            return;
+            return; // prevents bot's move if someone has won 
         }
-        field.removeEventListener("click", handleButtonFieldClick);
 
         makeRandomMove();
 
@@ -272,23 +243,18 @@ field.addEventListener("click", handleButtonFieldClick);
 const playForCrossesButton = document.querySelector(".symbol-chooser__cross");
 playForCrossesButton.addEventListener("click", (e) => {
 
-    if (appState.gameIsInProgress) {
-
-        if (appState.moveCount !== 0) {
-            incrementWinLossCounters(appState.botSymbol, appState.playerSymbol);
-        }
-
+    // counting as loss
+    if (appState.gameIsInProgress && appState.moveCount !== 0) {
+        updateDashboardCounters(appState.botSymbol, appState.playerSymbol);
     }
 
-    // this thing if placed below overrides the symbol change logic
-    restoreInitialAppState();
-    restoreTheFieldState(field);
-    field.addEventListener("click", handleButtonFieldClick);
-
-    appState.moveCount = 0;
-    appState.gameIsInProgress = true;
+    restoreInitialAppState(appState);
     appState.playerSymbol = "x";
     appState.botSymbol = "o";
+
+    restoreTheFieldState(field);
+
+    field.addEventListener("click", handleButtonFieldClick);
 
 });
 
@@ -296,41 +262,32 @@ playForCrossesButton.addEventListener("click", (e) => {
 const playForCirclesButton = document.querySelector(".symbol-chooser__outer-circle");
 playForCirclesButton.addEventListener("click", (e) => {
 
-    if (appState.gameIsInProgress) {
-
-        // check whether moves had been made, if so count as loss
-        // if (appState.gridSize**2 !== appState.freeTileIDs.length) {
-        //     incrementWinLossCounters(appState.botSymbol, appState.playerSymbol);
-        // }
-        if (appState.moveCount !== 0) {
-            incrementWinLossCounters(appState.botSymbol, appState.playerSymbol);
-        }
-
+    // couting as loss
+    if (appState.gameIsInProgress && appState.moveCount !== 0) {
+        updateDashboardCounters(appState.botSymbol, appState.playerSymbol);
     }
 
-    // this thing if placed below overrides the symbol change logic
-    restoreInitialAppState();
-    restoreTheFieldState(field);
-    field.addEventListener("click", handleButtonFieldClick);
-
-    appState.moveCount = 0;
-    appState.gameIsInProgress = true;
+    restoreInitialAppState(appState);
     appState.playerSymbol = "o";
     appState.botSymbol = "x";
+
+    restoreTheFieldState(field);
+    field.addEventListener("click", handleButtonFieldClick);
 
     makeRandomMove();
 
 });
 
 
-// the give up button logic has to be fixed
-// bot player's move appear after it has been pressed
 const giveUpButton = document.querySelector(".controls__give-up-button");
 giveUpButton.addEventListener("click", () => {
-    // to not allow to add losses to the counter when there are not characters on the field
-    if (appState.moveCount == 0) {
+
+    if (appState.moveCount === 0) {
         return;
     }
-    lossCount.textContent = Number(lossCount.textContent) + 1;
+
     restoreTheFieldState(field);
+    restoreInitialAppState(appState);
+
+    lossCount.textContent = Number(lossCount.textContent) + 1;
 });
