@@ -13,7 +13,7 @@ const appState = {
 };
 
 
-const fieldTiles = document.querySelectorAll(".field__tile");
+// const fieldTiles = document.querySelectorAll(".field__tile");
 
 
 function restoreInitialAppState(appState) {
@@ -31,6 +31,50 @@ function restoreInitialAppState(appState) {
     appState.gameNumber += 1;
 
 }
+
+
+function changeFieldSize(appState, field, size) {
+
+    appState.gridSize = size;
+
+    function createTile(gridSize, fieldSideLength, fieldGapLength, fieldPaddingLength, tileID) {
+
+        const tileSideLength = (fieldSideLength - fieldGapLength * (gridSize - 1) - 2 * fieldPaddingLength) / gridSize;
+
+        const tile = document.createElement('div');
+        tile.classList.add('field__tile');
+        tile.setAttribute("data-field-tile-id", tileID);
+        tile.style.height = tileSideLength + '%';
+        tile.style.width = tileSideLength + '%';
+
+        return tile;
+
+    }
+    
+    appState.freeTileIDs = [];
+
+    const fieldSideLength = 100; // in percents
+    const gap = fieldSideLength * 0.064 / size; // this constant makes for good proportions on the field 
+    const padding = fieldSideLength * 0.0482 / size; // this constant makes for good proportions on the field 
+
+    field.style.gap = gap + '%';
+    field.style.padding = padding + '%';
+
+    while (field.hasChildNodes()) {
+        field.removeChild(field.lastChild);
+    }
+
+    for (let i = 0; i < appState.gridSize**2; i++) {
+        const tileID = `${Math.floor(i / appState.gridSize)}, ${i % appState.gridSize}`; 
+        appState.freeTileIDs.push(tileID);
+        const el = createTile(appState.gridSize, fieldSideLength, gap, padding, tileID);
+        field.appendChild(el);
+    }
+
+    console.log(appState.freeTileIDs)
+
+}
+
 
 
 function restoreTheFieldState(field) {
@@ -79,6 +123,12 @@ function incrementVictoryCounters(appState, symbol, elementsXCoord, elementsYCoo
         // the element is on the second diagonal
         initOrIncrementCounter(symbolCounters, "secondDiagonal");
     } 
+
+    console.log("crosses")
+    console.log(appState.crossesVictoryCounters)
+
+    console.log("circles")
+    console.log(appState.circlesVictoryCounters)
 
 }
 
@@ -133,7 +183,7 @@ function handleWinConditionCheckResult(appState, result) {
 }
 
 
-function makeRandomMove() {
+function makeRandomMove(appState) {
 
     const randomlyChosenIndex = Math.floor(Math.random() * appState.freeTileIDs.length);
     const randomFreeTileID = appState.freeTileIDs[randomlyChosenIndex];
@@ -155,8 +205,10 @@ function makeRandomMove() {
         if (appState.gameNumber !== gameNumber) {
             return false;
         }
+        console.log("passed check in bot");
 
         const elementToBeAdded = createChosenElement(appState.botSymbol);
+        console.log(elementToBeAdded)
         tile.appendChild(elementToBeAdded);
         let [x, y] = randomFreeTileID.split(', ');
         incrementVictoryCounters(appState, appState.botSymbol, x, y);
@@ -205,11 +257,13 @@ function handleButtonFieldClick(e) {
     const clickedElement = e.target;
 
     if (clickedElement.className === "field__tile") {
+        console.log('working')
 
         const elID = clickedElement.getAttribute("data-field-tile-id")
         if (!appState.freeTileIDs.includes(elID)) {
             return;
         }
+        console.log('in free tiles');
 
         // adding the needed symbol to the DOM
         const elementToBeAdded = createChosenElement(appState.playerSymbol);
@@ -230,7 +284,8 @@ function handleButtonFieldClick(e) {
             return; // prevents bot's move if someone has won 
         }
 
-        makeRandomMove();
+        makeRandomMove(appState);
+        console.log("launched bot");
 
     }
 
@@ -277,7 +332,7 @@ playForCirclesButton.addEventListener("click", (e) => {
     restoreTheFieldState(field);
     field.removeEventListener("click", handleButtonFieldClick);
 
-    makeRandomMove();
+    makeRandomMove(appState);
 
 });
 
@@ -295,3 +350,9 @@ giveUpButton.addEventListener("click", () => {
     lossCount.textContent = Number(lossCount.textContent) + 1;
 
 });
+
+
+const value = Number(prompt("gridSize: "));
+changeFieldSize(appState, field, value);
+const fieldTiles = document.querySelectorAll(".field__tile");
+field.addEventListener('click', handleButtonFieldClick);
