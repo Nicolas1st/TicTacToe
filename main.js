@@ -275,7 +275,7 @@ playForCirclesButton.addEventListener("click", (e) => {
     appState.botSymbol = "x";
 
     restoreTheFieldState(field);
-    field.addEventListener("click", handleButtonFieldClick);
+    field.removeEventListener("click", handleButtonFieldClick);
 
     makeRandomMove();
 
