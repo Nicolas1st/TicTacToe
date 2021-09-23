@@ -61,10 +61,11 @@ body {
 	background-color: var(--main-theme-color);
 	height: 27vw;
 	width: 27vw;
-	border-radius: 25px;
+	border-radius: 2%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+	gap: 0.75vw;
 	padding: 0.75vw
 }
 
@@ -72,10 +73,9 @@ body {
 .field__tile {
 	height: 8vw;
 	width: 8vw;
-	border-radius: 12px;
+	border-radius: 10%;
 	background-color: var(--second-theme-color);
 	transition-duration: 0.7s;
-	margin-bottom: 0.75vw;
 	display: flex;
 	justify-content: center;
 	align-items: center;
