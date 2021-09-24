@@ -10,6 +10,7 @@ const appState = {
     crossesVictoryCounters: {},
     circlesVictoryCounters: {},
     gameNumber: 0,
+    victoryLengthCondition: 3,
 };
 
 
@@ -29,6 +30,7 @@ function restoreInitialAppState(appState) {
     appState.crossesVictoryCounters = {};
     appState.circlesVictoryCounters = {};
     appState.gameNumber += 1;
+    appState.victoryLengthCondition = 3;
 
 }
 
@@ -143,7 +145,7 @@ function checkVictoryCounters(appState, symbol) {
     }
     
     for (let victoryCounter in victoryCounters) {
-        if (victoryCounters[victoryCounter] === appState.gridSize) {
+        if (victoryCounters[victoryCounter] === appState.victoryLengthCondition) {
             return symbol;
         }
     }
@@ -197,6 +199,8 @@ function makeRandomMove(appState) {
             break;
         }
     }
+
+    console.log("Bot's move", randomFreeTileID, tile);
 
     const gameNumber = appState.gameNumber;
     const randomDelay = Math.random() * 1703;
@@ -296,7 +300,7 @@ const field = document.querySelector(".field");
 field.addEventListener("click", handleButtonFieldClick);
 
 
-const playForCrossesButton = document.querySelector(".symbol-chooser__cross");
+const playForCrossesButton = document.querySelector(".side-picker__cross");
 playForCrossesButton.addEventListener("click", (e) => {
 
     // counting as loss
@@ -316,7 +320,7 @@ playForCrossesButton.addEventListener("click", (e) => {
 });
 
 
-const playForCirclesButton = document.querySelector(".symbol-chooser__circle-container");
+const playForCirclesButton = document.querySelector(".side-picker__circle-container");
 playForCirclesButton.addEventListener("click", (e) => {
 
     // counting as loss
@@ -347,12 +351,26 @@ giveUpButton.addEventListener("click", () => {
     restoreTheFieldState(field);
     restoreInitialAppState(appState);
 
+    const lossCount = document.querySelector(".stats__loss-count"); 
     lossCount.textContent = Number(lossCount.textContent) + 1;
 
 });
 
 
-const value = Number(prompt("gridSize: "));
-changeFieldSize(appState, field, value);
-const fieldTiles = document.querySelectorAll(".field__tile");
+changeFieldSize(appState, field, 3);
+let fieldTiles = document.querySelectorAll(".field__tile");
 field.addEventListener('click', handleButtonFieldClick);
+
+
+const changeSizeInput = document.querySelector(".change-size");
+changeSizeInput.addEventListener("input", (e) => {
+    const size = Number(e.target.value);
+    changeFieldSize(appState, field, size);
+    fieldTiles = document.querySelectorAll(".field__tile");
+});
+
+
+const victoryConditionLenghtSlider = document.querySelector(".victory-condition-input");
+victoryConditionLenghtSlider.addEventListener("input", (e) => {
+   appState.victoryLengthCondition = Number(e.target.value); 
+});
