@@ -8,22 +8,13 @@
 
 <body class="page">
 
-    <header class="heading__container">
+    <header class="header">
         <h1 class="heading"> TicTacToe </h1>
     </header>
 
-    <main class="container">
+    <main class="main-content">
 
         <div class="field">
-            <div class="field__tile" data-field-tile-id="0, 0"> </div>
-            <div class="field__tile" data-field-tile-id="0, 1"> </div>
-            <div class="field__tile" data-field-tile-id="0, 2"> </div>
-            <div class="field__tile" data-field-tile-id="1, 0"> </div>
-            <div class="field__tile" data-field-tile-id="1, 1"> </div>
-            <div class="field__tile" data-field-tile-id="1, 2"> </div>
-            <div class="field__tile" data-field-tile-id="2, 0"> </div>
-            <div class="field__tile" data-field-tile-id="2, 1"> </div>
-            <div class="field__tile" data-field-tile-id="2, 2"> </div>
         </div>
 
         <div class="side-panel">
@@ -50,20 +41,40 @@
 
             </div>
 
-            <div class="controls">
-                <div class="symbol-chooser">
-                    <p class="symbol-chooser__text"> Choose side </p>
-                    <div class="symbol-chooser__container">
-                        <div class="cross symbol-chooser__cross">
-                            <div class="cross__left-stick symbol-chooser__left-stick"> </div>
-                            <div class="cross__right-stick symbol-chooser__right-stick"> </div>
-                        </div>
-                        <div class="symbol-chooser__circle-container">
-                            <div class="outer-circle symbol-chooser__circle"> </div>
-                        </div>
+            <div class="sliders">
+                    <div class="slider">
+                        <p> Grid </p>
+                        <input type="range" min="3" max="7" value="3" class="change-size">
                     </div>
+                    <div class="slider">
+                        <p> Cond </p>
+                        <input type="range" min="3" max="7" value="3" class="victory-condition-input">
+                    </div>
+            </div>
+
+            <div class="controls">
+
+                <div class="side-picker">
+
+                    <p class="side-picker__text"> Choose Side </p>
+
+                    <div class="side-picker__sides">
+
+                        <div class="cross side-picker__cross field__tile">
+                            <div class="cross__left-stick side-picker__stick"> </div>
+                            <div class="cross__right-stick side-picker__stick"> </div>
+                        </div>
+
+                        <div class="side-picker__circle-container field__tile">
+                            <div class="outer-circle side-picker__circle"> </div>
+                        </div>
+
+                    </div> 
+
                 </div>
+
                 <button class="controls__give-up-button"> Give Up </button>
+
             </div>
 
         </div>
