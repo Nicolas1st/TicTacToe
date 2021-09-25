@@ -11,6 +11,15 @@ const appState = {
     circlesVictoryCounters: {},
     gameNumber: 0,
     victoryLengthCondition: 3,
+
+    setFreeTilesIDs: function() {
+        this.freeTileIDs = [];
+        for (let i = 0; i < appState.gridSize**2; i++) {
+            const tileID = `${Math.floor(i / this.gridSize)}, ${i % this.gridSize}`; 
+            this.freeTileIDs.push(tileID);
+        }
+    }
+
 };
 
 
@@ -22,9 +31,7 @@ function restoreInitialAppState(appState) {
     appState.moveCount = 0;
     appState.playerSymbol = "x";
     appState.botSymbol = "o";
-    appState.freeTileIDs = ["0, 0", "0, 1", "0, 2",
-                            "1, 0", "1, 1", "1, 2",
-                            "2, 0", "2, 1", "2, 2"];
+    appState.setFreeTilesIDs();
     appState.gameIsInProgress = true;
     appState.gridSize = 3;
     appState.crossesVictoryCounters = {};
@@ -37,6 +44,7 @@ function restoreInitialAppState(appState) {
 
 function changeFieldSize(appState, field, size) {
 
+    restoreInitialAppState(appState);
     appState.gridSize = size;
 
     function createTile(gridSize, fieldSideLength, fieldGapLength, fieldPaddingLength, tileID) {
@@ -73,7 +81,7 @@ function changeFieldSize(appState, field, size) {
         field.appendChild(el);
     }
 
-    console.log(appState.freeTileIDs)
+    field.addEventListener('click', handleButtonFieldClick);
 
 }
 
@@ -125,12 +133,6 @@ function incrementVictoryCounters(appState, symbol, elementsXCoord, elementsYCoo
         // the element is on the second diagonal
         initOrIncrementCounter(symbolCounters, "secondDiagonal");
     } 
-
-    console.log("crosses")
-    console.log(appState.crossesVictoryCounters)
-
-    console.log("circles")
-    console.log(appState.circlesVictoryCounters)
 
 }
 
@@ -200,8 +202,6 @@ function makeRandomMove(appState) {
         }
     }
 
-    console.log("Bot's move", randomFreeTileID, tile);
-
     const gameNumber = appState.gameNumber;
     const randomDelay = Math.random() * 1703;
     setTimeout(() => {
@@ -209,10 +209,8 @@ function makeRandomMove(appState) {
         if (appState.gameNumber !== gameNumber) {
             return false;
         }
-        console.log("passed check in bot");
 
         const elementToBeAdded = createChosenElement(appState.botSymbol);
-        console.log(elementToBeAdded)
         tile.appendChild(elementToBeAdded);
         let [x, y] = randomFreeTileID.split(', ');
         incrementVictoryCounters(appState, appState.botSymbol, x, y);
@@ -261,13 +259,11 @@ function handleButtonFieldClick(e) {
     const clickedElement = e.target;
 
     if (clickedElement.className === "field__tile") {
-        console.log('working')
 
         const elID = clickedElement.getAttribute("data-field-tile-id")
         if (!appState.freeTileIDs.includes(elID)) {
             return;
         }
-        console.log('in free tiles');
 
         // adding the needed symbol to the DOM
         const elementToBeAdded = createChosenElement(appState.playerSymbol);
@@ -289,7 +285,6 @@ function handleButtonFieldClick(e) {
         }
 
         makeRandomMove(appState);
-        console.log("launched bot");
 
     }
 
