@@ -242,10 +242,10 @@ function createChosenElement(elementName) {
 
     } else if (elementName === "o"){
 
-        const outerCircle = document.createElement("div");
-        outerCircle.classList.add("outer-circle");
+        const circle = document.createElement("div");
+        circle.classList.add("circle");
 
-        return outerCircle;
+        return circle;
 
     }
 }
@@ -354,7 +354,7 @@ let fieldTiles = document.querySelectorAll(".field__tile");
 field.addEventListener('click', handleButtonFieldClick);
 
 
-const changeSizeInput = document.querySelector(".change-size");
+const changeSizeInput = document.querySelector(".change-size-slider");
 changeSizeInput.addEventListener("input", (e) => {
     const size = Number(e.target.value);
     changeFieldSize(appState, field, size);
@@ -362,7 +362,7 @@ changeSizeInput.addEventListener("input", (e) => {
 });
 
 
-const victoryConditionLenghtSlider = document.querySelector(".victory-condition-input");
+const victoryConditionLenghtSlider = document.querySelector(".victory-condition-slider");
 victoryConditionLenghtSlider.addEventListener("input", (e) => {
    appState.victoryLengthCondition = Number(e.target.value); 
 });
