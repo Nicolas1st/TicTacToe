@@ -23,9 +23,6 @@ const appState = {
 };
 
 
-// const fieldTiles = document.querySelectorAll(".field__tile");
-
-
 function restoreInitialAppState(appState) {
 
     appState.moveCount = 0;
@@ -49,7 +46,7 @@ function changeFieldSize(appState, field, size) {
 
     function createTile(gridSize, fieldSideLength, fieldGapLength, fieldPaddingLength, tileID) {
 
-        const tileSideLength = (fieldSideLength - fieldGapLength * (gridSize - 1) - 2 * fieldPaddingLength) / gridSize;
+        const tileSideLength = (fieldSideLength - fieldGapLength * (gridSize - 1)) / (gridSize + 0.15);
 
         const tile = document.createElement('div');
         tile.classList.add('field__tile');
@@ -68,7 +65,7 @@ function changeFieldSize(appState, field, size) {
     const padding = fieldSideLength * 0.0482 / size; // this constant makes for good proportions on the field 
 
     field.style.gap = gap + '%';
-    field.style.padding = padding + '%';
+    // field.style.padding = padding + '%';
 
     while (field.hasChildNodes()) {
         field.removeChild(field.lastChild);
@@ -369,3 +366,15 @@ const victoryConditionLenghtSlider = document.querySelector(".victory-condition-
 victoryConditionLenghtSlider.addEventListener("input", (e) => {
    appState.victoryLengthCondition = Number(e.target.value); 
 });
+
+
+function setFieldHeight() {
+    const field = document.querySelector(".field");
+    const fieldWidth = window.getComputedStyle(field);
+    console.log(fieldWidth)
+    field.style.height = fieldWidth.width;
+}
+
+
+window.addEventListener('resize', setFieldHeight);
+setFieldHeight();

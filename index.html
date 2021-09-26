@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> TicTacToe Game </title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,79 +15,82 @@
         <h1 class="heading"> TicTacToe </h1>
     </header>
 
-    <main class="main-content">
+    <div class="main">
 
-        <div class="field">
-        </div>
+        <main class="main-content">
 
-        <div class="side-panel">
+            <div class="field"> </div>
 
-            <div class="stats">
+            <div class="side-panel">
 
-                <div class="stats__victories">
-                    <div class="stats__text">
-                        <p> Won </p>
-                    </div>
-                    <div class="stats__result">
-                        <p class="stats__win-count"> 0 </p>
-                    </div>
-                </div>
+                <div class="stats">
 
-                <div class="stats__losses">
-                    <div class="stats__text">
-                        <p class="stats__text"> Lost </p>
-                    </div>
-                    <div class="stats__result">
-                        <p class="stats__loss-count"> 0 </p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="sliders">
-                    <div class="slider">
-                        <p> Grid </p>
-                        <input type="range" min="3" max="7" value="3" class="change-size">
-                    </div>
-                    <div class="slider">
-                        <p> Cond </p>
-                        <input type="range" min="3" max="7" value="3" class="victory-condition-input">
-                    </div>
-            </div>
-
-            <div class="controls">
-
-                <div class="side-picker">
-
-                    <p class="side-picker__text"> Choose Side </p>
-
-                    <div class="side-picker__sides">
-
-                        <div class="cross side-picker__cross field__tile">
-                            <div class="cross__left-stick side-picker__stick"> </div>
-                            <div class="cross__right-stick side-picker__stick"> </div>
+                    <div class="stats__victories">
+                        <div class="stats__text">
+                            <p> Won </p>
                         </div>
-
-                        <div class="side-picker__circle-container field__tile">
-                            <div class="outer-circle side-picker__circle"> </div>
+                        <div class="stats__result">
+                            <p class="stats__win-count"> 0 </p>
                         </div>
+                    </div>
 
-                    </div> 
+                    <div class="stats__losses">
+                        <div class="stats__text">
+                            <p class="stats__text"> Lost </p>
+                        </div>
+                        <div class="stats__result">
+                            <p class="stats__loss-count"> 0 </p>
+                        </div>
+                    </div>
 
                 </div>
 
-                <button class="controls__give-up-button"> Give Up </button>
+                <div class="sliders">
+                        <div class="slider">
+                            <p> Grid </p>
+                            <input type="range" min="3" max="7" value="3" class="change-size">
+                        </div>
+                        <div class="slider">
+                            <p> Cond </p>
+                            <input type="range" min="3" max="7" value="3" class="victory-condition-input">
+                        </div>
+                </div>
+
+                <div class="controls">
+
+                    <div class="side-picker">
+
+                        <p class="side-picker__text"> Choose Side </p>
+
+                        <div class="side-picker__sides">
+
+                            <div class="cross side-picker__cross field__tile">
+                                <div class="cross__left-stick side-picker__stick"> </div>
+                                <div class="cross__right-stick side-picker__stick"> </div>
+                            </div>
+
+                            <div class="side-picker__circle-container field__tile">
+                                <div class="outer-circle side-picker__circle"> </div>
+                            </div>
+
+                        </div> 
+
+                    </div>
+
+                    <button class="controls__give-up-button"> Give Up </button>
+
+                </div>
 
             </div>
 
-        </div>
-    </main>
+        </main>
+
+    </div>
 
     <footer class="footer">
-        <div class="footer__link-container">
+        <div class="link-container">
             <img src="./img/github_icon.png">
-            <a href="https://github.com/Nicolas1st/TicTacToe/" class="footer__link" alt="github icon" width="30px"
-                height="30px"> Project Repository </a>
+            <a href="https://github.com/Nicolas1st/TicTacToe/" class="footer__link" alt="github icon" width="30px" height="30px"> Project Repository </a>
         </div>
     </footer>
 
