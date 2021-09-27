@@ -156,8 +156,8 @@ function checkVictoryCounters(appState, symbol) {
 
 function updateDashboardCounters(winningSide, playerSymbol) {
 
-    const winCount = document.querySelector(".stats__win-count"); 
-    const lossCount = document.querySelector(".stats__loss-count"); 
+    const winCount = document.querySelector("#win-counter"); 
+    const lossCount = document.querySelector("#loss-counter"); 
 
     if (winningSide === playerSymbol) {
         winCount.textContent = Number(winCount.textContent) + 1;
@@ -169,6 +169,9 @@ function updateDashboardCounters(winningSide, playerSymbol) {
 
 
 function handleWinConditionCheckResult(appState, result) {
+
+    if (result === undefined) return
+
     if (result === 'x') {
         updateDashboardCounters(result, appState.playerSymbol);
         alert("crosses won");
@@ -181,6 +184,8 @@ function handleWinConditionCheckResult(appState, result) {
         alert("Draw")
         appState.gameIsInProgress = false;
     } 
+
+    field.removeEventListener("click", handleButtonFieldClick);
 }
 
 
@@ -288,11 +293,11 @@ function handleButtonFieldClick(e) {
 }
 
 
-const field = document.querySelector(".field");
+const field = document.querySelector("#field");
 field.addEventListener("click", handleButtonFieldClick);
 
 
-const playForCrossesButton = document.querySelector(".side-picker__cross");
+const playForCrossesButton = document.querySelector("#play-for-crosses-button");
 playForCrossesButton.addEventListener("click", (e) => {
 
     // counting as loss
@@ -312,7 +317,7 @@ playForCrossesButton.addEventListener("click", (e) => {
 });
 
 
-const playForCirclesButton = document.querySelector(".side-picker__circle-container");
+const playForCirclesButton = document.querySelector("#play-for-circles-button");
 playForCirclesButton.addEventListener("click", (e) => {
 
     // counting as loss
@@ -333,7 +338,7 @@ playForCirclesButton.addEventListener("click", (e) => {
 });
 
 
-const giveUpButton = document.querySelector(".controls__give-up-button");
+const giveUpButton = document.querySelector("#give-up-button");
 giveUpButton.addEventListener("click", () => {
 
     if (appState.moveCount === 0) {
@@ -343,7 +348,7 @@ giveUpButton.addEventListener("click", () => {
     restoreTheFieldState(field);
     restoreInitialAppState(appState);
 
-    const lossCount = document.querySelector(".stats__loss-count"); 
+    const lossCount = document.querySelector("#loss-counter"); 
     lossCount.textContent = Number(lossCount.textContent) + 1;
 
 });
@@ -354,7 +359,7 @@ let fieldTiles = document.querySelectorAll(".field__tile");
 field.addEventListener('click', handleButtonFieldClick);
 
 
-const changeSizeInput = document.querySelector(".change-size-slider");
+const changeSizeInput = document.querySelector("#grid-size-slider");
 changeSizeInput.addEventListener("input", (e) => {
     const size = Number(e.target.value);
     changeFieldSize(appState, field, size);
@@ -362,14 +367,14 @@ changeSizeInput.addEventListener("input", (e) => {
 });
 
 
-const victoryConditionLenghtSlider = document.querySelector(".victory-condition-slider");
+const victoryConditionLenghtSlider = document.querySelector("#winning-sequence-length-slider");
 victoryConditionLenghtSlider.addEventListener("input", (e) => {
    appState.victoryLengthCondition = Number(e.target.value); 
 });
 
 
 function setFieldHeight() {
-    const field = document.querySelector(".field");
+    const field = document.querySelector("#field");
     const fieldWidth = window.getComputedStyle(field);
     console.log(fieldWidth)
     field.style.height = fieldWidth.width;

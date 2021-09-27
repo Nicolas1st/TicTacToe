@@ -19,7 +19,7 @@
 
         <main class="main-content">
 
-            <div class="field"> </div>
+            <div class="field" id="field"> </div>
 
             <div class="side-panel">
 
@@ -28,14 +28,14 @@
                     <div class="stat">
                         <p class="stats__text"> Won </p>
                         <div class="stats__result">
-                            <p class="stats__win-count"> 0 </p>
+                            <p class="stats__win-count" id="win-counter"> 0 </p>
                         </div>
                     </div>
 
                     <div class="stat">
                         <p class="stats__text"> Lost </p>
                         <div class="stats__result">
-                            <p class="stats__loss-count"> 0 </p>
+                            <p class="stats__loss-count" id="loss-counter"> 0 </p>
                         </div>
                     </div>
 
@@ -44,11 +44,11 @@
                 <div class="sliders">
                         <div class="slider">
                             <p> Grid </p>
-                            <input type="range" min="3" max="7" value="3" class="change-size-slider">
+                            <input type="range" min="3" max="7" value="3" class="change-size-slider" id="grid-size-slider">
                         </div>
                         <div class="slider">
                             <p> Cond </p>
-                            <input type="range" min="3" max="7" value="3" class="victory-condition-slider">
+                            <input type="range" min="3" max="7" value="3" class="victory-condition-slider" id="winning-sequence-length-slider">
                         </div>
                 </div>
 
@@ -60,12 +60,12 @@
 
                         <div class="side-picker__sides">
 
-                            <div class="cross side-picker__cross field__tile">
+                            <div class="cross side-picker__cross field__tile" id="play-for-crosses-button">
                                 <div class="cross__left-stick side-picker__stick"> </div>
                                 <div class="cross__right-stick side-picker__stick"> </div>
                             </div>
 
-                            <div class="side-picker__circle-container field__tile">
+                            <div class="side-picker__circle-container field__tile" id="play-for-circles-button">
                                 <div class="circle side-picker__circle"> </div>
                             </div>
 
@@ -75,7 +75,7 @@
 
                     <div class="button-container">
                         <p class="button-text"> Give Up </p>
-                        <button class="controls__give-up-button"> Click </button>
+                        <button class="controls__give-up-button" id="give-up-button"> Click </button>
                     </div>
 
                 </div>
