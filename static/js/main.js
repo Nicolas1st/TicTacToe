@@ -98,7 +98,7 @@ const fieldState = {
 
 function checkVictory(victoryState, fieldState, symbol, tileID) {
 
-  function initOrIncrementCounter(symbolCounters, counterName, elementsXCoord, elementsYCoord) {
+  function initOrIncrementCounter(symbolCounters, counterName, tileX, tileY) {
 
     if (symbolCounters[counterName] === undefined) {
       symbolCounters[counterName] = { len: 1,
@@ -109,10 +109,10 @@ function checkVictory(victoryState, fieldState, symbol, tileID) {
 
     if (counterName.startsWith("row")) {
       // tiles in any row have unique y coords
-      symbolCounters[counterName].tiles.push(elementsYCoord);
+      symbolCounters[counterName].tiles.push(tileY);
     } else {
       //in cols and both diags x coords are unique
-      symbolCounters[counterName].tiles.push(elementsXCoord);
+      symbolCounters[counterName].tiles.push(tileX);
     }
   }
 
@@ -162,15 +162,15 @@ function checkVictory(victoryState, fieldState, symbol, tileID) {
 }
 
 
-function handleGameResult(result) {
+function handleGameResult(gameState, victoryState, result) {
 
-  function updateDashboardCounters(winningSide) {
+  function updateDashboardCounters(outcome) {
     const winCount = document.querySelector("#win-counter");
     const lossCount = document.querySelector("#loss-counter");
 
-    if (winningSide === gameState.playerSymbol) {
+    if (outcome === gameState.playerSymbol) {
       winCount.textContent = Number(winCount.textContent) + 1;
-    } else if (winningSide === gameState.opponentSymbol) {
+    } else if (outcome === gameState.opponentSymbol) {
       lossCount.textContent = Number(lossCount.textContent) + 1;
     } else {
       winCount.textContent = Number(winCount.textContent) + 0.5;
@@ -199,7 +199,7 @@ function handleGameResult(result) {
 }
 
 
-function makeRandomMove() {
+function makeRandomMove(fieldState, gameState, victoryState) {
 
   if (!gameState.gameIsInProgress) return;
 
@@ -231,7 +231,7 @@ function makeRandomMove() {
     gameState.moveCount++;
 
     fieldState.field.addEventListener("click", handleButtonFieldClick);
-    handleGameResult(res);
+    handleGameResult(gameState, victoryState, res);
   }, randomDelay);
 }
 
@@ -279,10 +279,10 @@ function handleButtonFieldClick(e) {
     gameState.moveCount++;
 
     // comment this line to make the mutliplayer work
-    handleGameResult(res);
+    handleGameResult(gameState, victoryState, res);
 
     if (gameState.offlineGame && res === undefined) {
-      makeRandomMove();
+      makeRandomMove(fieldState, gameState, victoryState);
     } else if (!gameState.offlineGame){
       const move = {
         recepient: gameState.opponentSymbol,
@@ -314,7 +314,7 @@ function setFieldHeight() {
 document.querySelector("#play-for-crosses-button").addEventListener("click", (e) => {
 
   if (gameState.gameIsInProgress && gameState.moveCount !== 0) {
-    handleGameResult(gameState.opponentSymbol);
+    handleGameResult(gameState, victoryState, gameState.opponentSymbol);
   }
 
   gameState.offlineGame = true;
@@ -335,7 +335,7 @@ document.querySelector("#play-for-crosses-button").addEventListener("click", (e)
 document.querySelector("#play-for-circles-button").addEventListener("click", (e) => {
 
   if (gameState.gameIsInProgress && gameState.moveCount !== 0) {
-    handleGameResult(gameState.opponentSymbol);
+    handleGameResult(gameState, victoryState, gameState.opponentSymbol);
   }
 
   gameState.offlineGame = true;
@@ -349,7 +349,7 @@ document.querySelector("#play-for-circles-button").addEventListener("click", (e)
   fieldState.clearField();
   fieldState.field.removeEventListener("click", handleButtonFieldClick);
 
-  makeRandomMove();
+  makeRandomMove(fieldState, gameState, victoryState);
 
 });
 
@@ -385,74 +385,68 @@ setFieldHeight();
 fieldState.changeFieldSize(3);
 fieldState.field.addEventListener("click", handleButtonFieldClick);
 
-socket.on('connect', function() {
-    socket.emit('my event', {data: 'I\'m connected!'});
-});
 
-
-var socket = io();
-
-socket.on('message', function(msg) {
-
-  console.log(msg);
-
-    if (msg === 'x') {
-
-      gameState.playerSymbol = 'x';
-      gameState.opponentSymbol = 'o';
-      console.log('x');
-
-    } else if (msg === 'o') {
-
-      gameState.playerSymbol = 'o';
-      gameState.opponentSymbol = 'x';
-      console.log('o');
-      fieldState.field.addEventListener('click', handleButtonFieldClick);      
-
-    } else if (msg === 'start') {
-      if (gameState.playerSymbol === 'x') {
-        fieldState.field.addEventListener('click', handleButtonFieldClick)
-      }
-    } else {
-      const tiles = document.querySelectorAll(".field__tile");
-      const tile = findTileByID(tiles, msg);      
-      console.log(msg)
-      if (tile === undefined) {
-        console.log('error, probably because of the different grid sizes');
-      }
-      tile.appendChild(createChosenElement(gameState.opponentSymbol));
-      fieldState.freeTileIDs.splice(fieldState.freeTileIDs.indexOf(msg), 1);
-      const [x, y] = msg.split(', ').map(Number);
-      const res = checkVictory(victoryState, gameState.opponentSymbol, x, y);
-      handleGameResult( res);
-      fieldState.field.addEventListener('click', handleButtonFieldClick);
-
-    }
-
-});
-
-
-const tiles = document.querySelectorAll(".field__tile");
-
-
-function findTileByID(tiles, tileID) {
-  console.log(`tileID ${tileID}`)
-  for (let i = 0; i < tiles.length; i++) {
-    const el = tiles[i];
-    if (el.getAttribute("data-field-tile-id") == tileID) {
-      return el;
-    }
-  }
-  return undefined;
-}
-
-
+let socket;
 document.querySelector('#connect-to-server').addEventListener('click', (e) => {
-  if (e.target.value = 'Play Online') {
-    e.target.value = 'Play Offline';
+
+    console.log(e.target.value)
+  if (e.target.innerText === 'Play Online') {
+    e.target.innerText = 'Play Offline';
+    gameState.offlineGame = false;
+    socket = io();
+
+    socket.on('message', function(msg) {
+
+      function findTileByID(tiles, tileID) {
+        console.log(`tileID ${tileID}`)
+        for (let i = 0; i < tiles.length; i++) {
+          const el = tiles[i];
+          if (el.getAttribute("data-field-tile-id") == tileID) {
+            return el;
+          }
+        }
+        return undefined;
+      }
+
+      console.log(msg);
+
+        if (msg === 'x') {
+
+          gameState.playerSymbol = 'x';
+          gameState.opponentSymbol = 'o';
+          console.log('x');
+
+        } else if (msg === 'o') {
+
+          gameState.playerSymbol = 'o';
+          gameState.opponentSymbol = 'x';
+          console.log('o');
+          fieldState.field.addEventListener('click', handleButtonFieldClick);      
+
+        } else if (msg === 'start') {
+          if (gameState.playerSymbol === 'x') {
+            fieldState.field.addEventListener('click', handleButtonFieldClick)
+          }
+        } else {
+          const tiles = document.querySelectorAll(".field__tile");
+          const tile = findTileByID(fieldState.field.children, msg);      
+          console.log(msg)
+          if (tile === undefined) {
+            console.log('error, probably because of the different grid sizes');
+          }
+          tile.appendChild(createChosenElement(gameState.opponentSymbol));
+          fieldState.freeTileIDs.splice(fieldState.freeTileIDs.indexOf(msg), 1);
+          const res = checkVictory(victoryState, fieldState, gameState.opponentSymbol, msg);
+          handleGameResult(gameState, victoryState, res);
+          fieldState.field.addEventListener('click', handleButtonFieldClick);
+
+        }
+
+    });
   } else {
-    e.target.value = 'Play Online';
+    e.target.innerText = 'Play Online';
+    gameState.offlineGame = true;
+    socket = undefined;
   }
 
-  gameState.offlineGame = false;
 });
