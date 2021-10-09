@@ -371,7 +371,6 @@ document.querySelector("#give-up-button").addEventListener("click", () => {
 document.querySelector("#grid-size-slider").addEventListener("input", (e) => {
   const size = Number(e.target.value);
   fieldState.changeFieldSize(size);
-  // fieldTiles = document.querySelectorAll(".field__tile");
 });
 
 
