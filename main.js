@@ -426,3 +426,5 @@ function setFieldHeight() {
 
 window.addEventListener("resize", setFieldHeight);
 setFieldHeight();
+
+console.log("hello world")
