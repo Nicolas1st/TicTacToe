@@ -1,0 +1,35 @@
+.side-panel {
+	flex-basis: 0;
+	flex-grow: 1;
+	align-self: stretch;
+	padding: 0.75vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: var(--main-theme-color);
+	border-radius: 3%;
+}
+
+
+.side-panel__section {
+	height: 30%;
+	display: flex;
+	justify-content: space-between;
+}
+
+
+.stats-container {
+	align-items: center;
+	background-color: var(--second-theme-color);
+	border-radius: 1.2vh;
+}
+
+
+.sliders-container {
+	align-items: center;
+}
+
+
+.controls-container {
+	gap: 6%;
+}

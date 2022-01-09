@@ -1,0 +1,18 @@
+@import "./css/variables.css";
+@import "./css/global.css";
+
+@import "./css/header.css";
+
+@import "./css/main/global.css";
+@import "./css/main/common-styles.css";
+@import "./css/main/field.css";
+
+@import "./css/main/side-panel/global.css";
+@import "./css/main/side-panel/stats.css";
+@import "./css/main/side-panel/sliders.css";
+@import "./css/main/side-panel/side-picker.css";
+@import "./css/main/side-panel/buttons.css";
+
+@import "./css/footer.css";
+
+@import "./css/media-queries.css"

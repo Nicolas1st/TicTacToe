@@ -1,0 +1,29 @@
+.field {
+	flex-basis: 0;
+	flex-grow: 1;
+	padding: 0.75vw;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-content: space-between;
+	gap: 0.75vw;
+	background-color: var(--main-theme-color);
+	border-radius: 3%;
+}
+
+
+.field__tile {
+	height: 8vw;
+	width: 8vw;
+	border-radius: 10%;
+	background-color: var(--second-theme-color);
+	transition-duration: 0.7s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.field__tile:hover {
+	background-color: var(--highlight-color);
+}

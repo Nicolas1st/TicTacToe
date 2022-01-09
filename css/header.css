@@ -1,0 +1,15 @@
+.header {
+	height: var(--heading-height);
+	width: 100%;
+	background-color: var(--main-theme-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 15vw;
+}
+
+
+.header__heading {
+	font-size: 50px;
+	color: white;
+}

@@ -1,0 +1,8 @@
+:root {
+  --heading-height: 10vh;
+  --footer-height: 10vh;
+  --main-theme-color: #366735;
+  --second-theme-color: rgba(190, 190, 190);
+  --highlight-color: rgba(140, 140, 140);
+  --window-side-padding: 20vw;
+}

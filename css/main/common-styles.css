@@ -1,0 +1,36 @@
+.cross {
+	width: 90%;
+	height: 90%;
+	position: relative;
+}
+
+
+.cross__left-stick, .cross__right-stick{
+	width: 95%;
+	height: 15%;
+	border-radius: 0.5vw;
+	position: absolute;
+	left: 50%;
+	top: 50%; 
+	background-color: black;
+}
+
+
+.cross__left-stick {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+
+.cross__right-stick {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
+.circle {
+	width: 70%;
+	height: 70%;
+	background-color: black;
+	/* background-color: rgba(0, 0, 0, 0); */
+	border-radius: 50%;
+	position: relative;
+}

@@ -1,0 +1,26 @@
+.footer {
+	height: var(--footer-height);
+	width: 100%;
+	background-color: var(--main-theme-color);
+	font-size: 20px;
+	color: white;
+	padding: 0 var(--window-side-padding);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.footer__link-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	min-width: 280px;
+}
+
+
+.footer__link {
+	text-decoration: none;
+	color: white;
+}

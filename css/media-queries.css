@@ -1,0 +1,43 @@
+@media (max-width: 1200px) {
+	:root {
+		--window-side-padding: 10vw;
+	}
+}
+
+
+@media (max-width: 800px) {
+
+	.main {
+		height: unset;
+	}
+
+	.main-content {
+		flex-direction: column;
+	}
+
+	.field {
+		flex-basis: unset;
+		width: 100%;
+	}
+
+	.side-panel {
+		width: 100%;
+		gap: 1.5vh;
+		flex-basis: unset;
+		flex-grow: unset;
+		align-self: unset;
+	}
+
+	.controls {
+		height: 40%;
+	}
+
+	.heading {
+		font-size: 36px;
+	}
+
+	:root {
+		--window-side-padding: 7vw;
+	}
+
+}
