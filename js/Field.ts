@@ -3,20 +3,30 @@ class FieldComponent {
     size: number;
     field: HTMLElement;
     freeTilesIDs: string[];
+    meidator: Mediator;
+    clicksAreAllowed: boolean;
 
-    constructor(size: number, field: HTMLElement) {
+    constructor(mediator: Mediator, field: HTMLElement, size: number, clicksAreAllowed: boolean) {
 
-        this.size = size;
-        this.freeTilesIDs = this.createTileIDs(size);
+        this.meidator = mediator;
         this.field = field;
+        this.size = size;
+        this.clicksAreAllowed = clicksAreAllowed;
 
+        this.freeTilesIDs = this.createTileIDs(size);
         this.freeTilesIDs.forEach(tileID => {
             this.field.appendChild(this.createTile(tileID));
         });
 
+        this.field.addEventListener("click", (e) => {
+            if (this.clicksAreAllowed) {
+                mediator.notify(this, "click", {"clickedElement": e.target});
+            }
+        });
+
     }
 
-    restore(size: number): void {
+    restore(): void {
 
         // removing all the symbols on the field
         const tiles = Array.from(this.field.children);
@@ -24,8 +34,16 @@ class FieldComponent {
             t.lastChild.remove();
         });
 
-        this.freeTilesIDs = this.createTileIDs(tiles.length)
+        this.freeTilesIDs = this.createTileIDs(this.size);
 
+    }
+
+    allowClicks() {
+        this.clicksAreAllowed = true;
+    }
+
+    forbidClicks() {
+        this.clicksAreAllowed = false;
     }
 
     changeSize(size: number): void {
