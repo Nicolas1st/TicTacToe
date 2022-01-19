@@ -4,45 +4,15 @@ class FieldComponent {
     field: HTMLElement;
     freeTilesIDs: string[];
 
-    constructor(size: number) {
+    constructor(size: number, field: HTMLElement) {
 
         this.size = size;
         this.freeTilesIDs = this.createTileIDs(size);
-        this.field = this.createField(size);
+        this.field = field;
 
-    }
-
-    createField(size: number): HTMLElement {
-
-        const field: HTMLElement = document.createElement("div");
-        field.classList.add("field");
-
-        this.freeTilesIDs.map(
-            ID => this.createTile(ID)
-        ).forEach(
-            tile => field.appendChild(tile)
-        );
-
-        return field
-
-    }
-
-    createTile(tileID: string): HTMLElement {
-
-        const tile: HTMLElement = document.createElement("div")
-        tile.classList.add("field__tile");
-        tile.setAttribute("data-field-tile-id", tileID);
-
-        return tile;
-
-    }
-
-    createTileIDs(size: number): string[] {
-
-        return Array.from(
-            {length: size},
-            (_, i) => `${Math.floor(i / size)}, ${i % size}`
-        )
+        this.freeTilesIDs.forEach(tileID => {
+            this.field.appendChild(this.createTile(tileID));
+        });
 
     }
 
@@ -60,8 +30,11 @@ class FieldComponent {
 
     changeSize(size: number): void {
 
-        this.freeTilesIDs = this.createTileIDs(size)
-        this.field = this.createField(size)
+        this.freeTilesIDs = this.createTileIDs(size);
+
+        this.freeTilesIDs.forEach(tileID => {
+            this.field.appendChild(this.createTile(tileID));
+        });
 
     }
 
@@ -83,8 +56,23 @@ class FieldComponent {
 
     }
 
-    init(mountPoint: HTMLElement) {
-        mountPoint.appendChild(this.field);
+    createTile(tileID: string): HTMLElement {
+
+        const tile: HTMLElement = document.createElement("div")
+        tile.classList.add("field__tile");
+        tile.setAttribute("data-field-tile-id", tileID);
+
+        return tile;
+
+    }
+
+    createTileIDs(size: number): string[] {
+
+        return Array.from(
+            {length: size},
+            (_, i) => `${Math.floor(i / size)}, ${i % size}`
+        )
+
     }
 
 }
