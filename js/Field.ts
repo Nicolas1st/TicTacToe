@@ -38,13 +38,10 @@ class FieldComponent {
 
     }
 
-    allowClicks() {
-        this.clicksAreAllowed = true;
+    toggleAllowClicks() {
+        this.clicksAreAllowed = !this.clicksAreAllowed;
     }
 
-    forbidClicks() {
-        this.clicksAreAllowed = false;
-    }
 
     changeSize(size: number): void {
 
@@ -69,6 +66,8 @@ class FieldComponent {
 
         this.freeTilesIDs.splice(this.freeTilesIDs.indexOf(tileID), 1);
         clickedElement.appendChild(createSymbol());
+
+        this.toggleAllowClicks();
 
         return true;
 
