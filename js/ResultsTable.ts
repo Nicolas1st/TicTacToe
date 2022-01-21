@@ -1,4 +1,4 @@
-class ResultsTable {
+export class ResultsTable {
 
     victoryCountElement: HTMLElement;
     lossCountElement: HTMLElement;

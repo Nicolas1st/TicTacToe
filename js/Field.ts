@@ -1,4 +1,6 @@
-class FieldComponent {
+import { Mediator } from "./Mediator";
+
+export class FieldComponent {
 
     size: number;
     field: HTMLElement;
