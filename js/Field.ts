@@ -5,12 +5,12 @@ export class FieldComponent {
     size: number;
     field: HTMLElement;
     freeTilesIDs: string[];
-    meidator: Mediator;
+    mediator: Mediator;
     clicksAreAllowed: boolean;
 
     constructor(mediator: Mediator, field: HTMLElement, size: number, clicksAreAllowed: boolean) {
 
-        this.meidator = mediator;
+        this.mediator = mediator;
         this.field = field;
         this.size = size;
         this.clicksAreAllowed = clicksAreAllowed;
