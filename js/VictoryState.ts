@@ -26,7 +26,7 @@ export class VictoryState {
     }
 
 
-    restoreInitialVictoryState() {
+    reset() {
 
         this.counters = {};
         this.movesLeft = this.boardSize * this.boardSize;
@@ -46,7 +46,7 @@ export class VictoryState {
     }
 
     // return the winning side symbol, or draw result, or unconcluded result
-    checkIfMoveWins(symbol: string, moveX: number, moveY: number) {
+    checkIfMoveWins(symbol: string, moveX: number, moveY: number): string {
 
         // this method could've been simpler, but since I check victory
         // for games that:

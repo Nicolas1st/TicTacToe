@@ -20,11 +20,11 @@ export class FieldComponent {
             this.field.appendChild(this.createTile(tileID));
         });
 
-        this.field.addEventListener("click", (e) => {
-            if (this.clicksAreAllowed) {
-                mediator.notify(this, "click", {"clickedElement": e.target});
-            }
-        });
+    }
+
+    areClicksAllowed() {
+
+        return this.clicksAreAllowed;
 
     }
 
@@ -55,7 +55,16 @@ export class FieldComponent {
 
     }
 
-    drawSymbol(clickedElement: HTMLElement, createSymbol: () => HTMLElement): boolean {
+    getTileCoordinates(clickedElement: HTMLElement): [number, number] {
+
+        const tileID: string = clickedElement.getAttribute("data-field-tile-id");
+        const [x, y] = tileID.split(", ").map(Number);
+
+        return [x, y];
+
+    }
+
+    drawSymbol(clickedElement: HTMLElement, symbolElement: HTMLElement): boolean {
 
         if (!clickedElement.className.includes("field__tile")) {
             return false;
@@ -67,7 +76,7 @@ export class FieldComponent {
         }
 
         this.freeTilesIDs.splice(this.freeTilesIDs.indexOf(tileID), 1);
-        clickedElement.appendChild(createSymbol());
+        clickedElement.appendChild(symbolElement);
 
         this.toggleAllowClicks();
 
