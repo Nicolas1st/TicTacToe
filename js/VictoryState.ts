@@ -33,6 +33,18 @@ export class VictoryState {
 
     }
 
+    setSymbolsInARowToWin(symbolsInARowToWin: number) {
+
+        this.symbolsInARowToWin = symbolsInARowToWin;
+
+    }
+
+    setBoardSize(boardSize: number) {
+
+        this.boardSize = boardSize;
+
+    }
+
     // return the winning side symbol, or draw result, or unconcluded result
     checkIfMoveWins(symbol: string, moveX: number, moveY: number) {
 
